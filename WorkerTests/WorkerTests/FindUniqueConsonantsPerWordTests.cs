@@ -15,6 +15,7 @@ namespace Laboratornaya4Tests.WorkerTests
         {
             // Arrange
             string filePath = "test1.txt";
+            File.WriteAllText("test1.txt", "БАРбекю Робот\r\nТарелка\r\nКом\r\n\r\nПапа", Encoding.UTF8);
             var consonants = new HashSet<char>("бвгджзйклмнпрстфхцчшщм");
 
             var expected = new HashSet<char> { 'м', 'л', 'п' }; // "м" встречается только в слове "ком".
@@ -48,7 +49,7 @@ namespace Laboratornaya4Tests.WorkerTests
         {
             // Arrange
             string filePath = "empty.txt";
-            File.WriteAllText(filePath, "", Encoding.UTF8);
+            File.WriteAllText("empty.txt", "", Encoding.UTF8);
             var consonants = new HashSet<char>("бвгджзйклмнпрстфхцчшщм");
 
             // Act
@@ -66,6 +67,7 @@ namespace Laboratornaya4Tests.WorkerTests
         {
             // Arrange
             string filePath = "test2.txt";
+            File.WriteAllText("test2.txt", "Жираф КоТ\nСлон БаР", Encoding.UTF8);
             var consonants = new HashSet<char>("бвгджзйклмнпрстфхцчшщм");
 
             var expected = new HashSet<char> { 'ж', 'ф', 'т', 'к', 'с', 'л', 'н', 'б' }; 

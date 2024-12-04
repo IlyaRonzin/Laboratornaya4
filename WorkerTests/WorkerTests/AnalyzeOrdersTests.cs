@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Laboratornaya4Tests
+namespace Laboratornaya4Tests.WorkerTests
 {
     [TestClass]
     public class AnalyzeOrdersTests
