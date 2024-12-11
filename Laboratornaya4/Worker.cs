@@ -95,34 +95,27 @@ namespace Laboratornaya4
                 return new HashSet<char>();
             }
 
-            Dictionary<char, int> consonantWordCount = new Dictionary<char, int>();
+            // HashSet для хранения всех встретившихся согласных
+            HashSet<char> allConsonants = new HashSet<char>();
+            // HashSet для хранения согласных, которые повторяются
+            HashSet<char> duplicateConsonants = new HashSet<char>();
 
             using (StreamReader reader = new StreamReader(filePath, Encoding.GetEncoding("UTF-8")))
             {
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    ProcessLine(line, consonants, consonantWordCount);
+                    ProcessLine(line, consonants, allConsonants, duplicateConsonants);
                 }
             }
 
-            return GetUniqueConsonants(consonantWordCount);
+            // Удаляем все дубликаты из множества всех согласных, чтобы оставить только уникальные
+            allConsonants.ExceptWith(duplicateConsonants);
+
+            return allConsonants;
         }
 
-        private static HashSet<char> GetUniqueConsonants(Dictionary<char, int> consonantWordCount)
-        {
-            HashSet<char> uniqueConsonants = new HashSet<char>();
-            foreach (var pair in consonantWordCount)
-            {
-                if (pair.Value == 1)
-                {
-                    uniqueConsonants.Add(pair.Key);
-                }
-            }
-            return uniqueConsonants;
-        }
-
-        private static void ProcessLine(string line, HashSet<char> consonants, Dictionary<char, int> consonantWordCount)
+        private static void ProcessLine(string line, HashSet<char> consonants, HashSet<char> allConsonants, HashSet<char> duplicateConsonants)
         {
             line = line.ToLower();
             string[] words = line.Split(new[] { ' ', '.', ',', '!', '?', ':', ';', '-', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
@@ -141,16 +134,14 @@ namespace Laboratornaya4
 
                 foreach (char ch in consonantsInWord)
                 {
-                    if (consonantWordCount.ContainsKey(ch))
+                    // Если согласная уже была добавлена в allConsonants, перемещаем её в дубликаты
+                    if (!allConsonants.Add(ch))
                     {
-                        consonantWordCount[ch]++;
-                    }
-                    else
-                    {
-                        consonantWordCount[ch] = 1;
+                        duplicateConsonants.Add(ch);
                     }
                 }
             }
         }
+
     }
 }
