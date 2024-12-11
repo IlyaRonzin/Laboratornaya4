@@ -1,51 +1,62 @@
-﻿using System.ComponentModel.Design;
-using System.Security.Cryptography.X509Certificates;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Xml.Linq;
+﻿using System;
+using System.IO;
+using System.Text;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Laboratornaya4
 {
     public class Program
     {
-        public static void Main()
+        static void Main()
         {
-            while (true)
+            Console.Write("Введите номер задания: ");
+            string task = Console.ReadLine();
+
+            switch (task)
             {
-                Console.Clear();
-                Console.WriteLine("Добро пожаловать в систему работы с матрицами!");
-                Console.WriteLine("1. Создать и объединить два упорядоченных списка.");
-                Console.WriteLine("2. Создать двусвязный список и посчитать количество элементов, у которых равные «соседи».");
-                Console.WriteLine("3. Создать список заказов и определить самые популярные блюда.");
-                Console.WriteLine("4. Напечатать в алфавитном порядке все согласные буквы из файла, которые входят ровно в одно слово.");
-                Console.WriteLine("0. Выйти");
-                Console.Write("Выберите действие: ");
+                case "1":
+                    List<string> mainList = new List<string> { "a", "a", "b", "d" };
+                    List<string> additionalList = new List<string>() { "f", "e", "c" };
+                    mainList = Worker.MergeSortedLists(mainList, additionalList);
+                    Console.WriteLine("Результат: " + string.Join(", ", mainList));
+                    break;
 
-                string choice = Console.ReadLine();
+                case "2":
+                    LinkedList<int> linkedList = new LinkedList<int>(new int[] { 1, 2, 3, 2, 3, 4 });
+                    Worker.CountEqualNeighbors(linkedList);
+                    break;
 
-                switch (choice)
-                {
-                    case "1":
-                        Tasks.ConcatenationOfTwoOrderedLists();
-                        break;
-                    case "2":
-                        Tasks.CountElementsWithEqualNeighbors();
-                        break;
-                    case "3":
-                        Tasks.AnalyzeOrders();
-                        break;
-                    case "4":
-                        Tasks.FindUniqueConsonantsPerWord();
-                        break;
-                    case "0":
-                        Console.WriteLine("Выход...");
-                        return;
-                    default:
-                        Console.WriteLine("Неверный выбор. Попробуйте снова.");
-                        break;
-                }
+                case "3":
+                    HashSet<string> menu = new HashSet<string> { "Пицца", "Салат", "Суп", "Бургер", "Паста", "Суши", "Багет", "Шаурма" };
+                    List<HashSet<string>> orders = new List<HashSet<string>>
+                    {
+                        new HashSet<string> { "Пицца", "Салат", "Суп", "Шаурма" },
+                        new HashSet<string> { "Пицца", "Паста", "Суп", "Бургер" },
+                        new HashSet<string> { "Пицца", "Салат", "Суп", "Багет" },
+                    };
+                    Worker.AnalyzeOrders(menu, orders);
+                    break;
 
-                Console.WriteLine("\nНажмите любую клавишу для продолжения...");
-                Console.ReadKey();
+                case "4":
+                    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                    string filePath = "test1.txt";
+
+                    if (!File.Exists(filePath))
+                    {
+                        Console.WriteLine("Файл не найден");
+                        break;
+                    }
+
+                    HashSet<char> consonants = new HashSet<char>("бвгджзйклмнпрстфхцчшщ");
+                    HashSet<char> uniqueConsonants = Worker.FindUniqueConsonants(filePath, consonants);
+
+                    Console.WriteLine("Уникальные согласные: " + string.Join(", ", uniqueConsonants));
+                    break;
+
+                default:
+                    Console.WriteLine("Неверный номер задания");
+                    break;
             }
         }
     }
